@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maafkan Aku Ya? 🥺</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 50%, #f3e8ff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .floating-elements {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-element {
+            position: absolute;
+            opacity: 0.25;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .confetti {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 30;
+        }
+
+        .confetti-item {
+            position: absolute;
+            animation: bounce-cute 2s ease-in-out infinite;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 32rem;
+            padding: 2.5rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border: 2px solid rgba(219, 39, 119, 0.2);
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            position: relative;
+            z-index: 10;
+        }
+
+        .avatar-container {
+            position: relative;
+            margin: 0 auto 2rem;
+        }
+
+        .avatar {
+            width: 13rem;
+            height: 13rem;
+            margin: 0 auto;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #fce7f3, #f3e8ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid #f9a8d4;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .emoji {
+            font-size: 5rem;
+            animation: wiggle 2s ease-in-out infinite;
+        }
+
+        .floating-icon {
+            position: absolute;
+            font-size: 2rem;
+        }
+
+        .floating-icon.heart {
+            top: -1rem;
+            right: -1rem;
+            animation: pulse-heart 2s ease-in-out infinite;
+        }
+
+        .floating-icon.sparkle {
+            bottom: -1rem;
+            left: -1rem;
+            animation: sparkle 3s ease-in-out infinite;
+        }
+
+        .floating-icon.star {
+            top: 1rem;
+            left: -1.5rem;
+            animation: wiggle 2.5s ease-in-out infinite;
+        }
+
+        .title {
+            font-size: 2.25rem;
+            font-weight: bold;
+            background: linear-gradient(to right, #ec4899, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: #6b7280;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .description {
+            font-size: 1.125rem;
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+
+        .hearts-row {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .heart-icon {
+            font-size: 1.25rem;
+            color: #f87171;
+            animation: pulse-heart 2s ease-in-out infinite;
+        }
+
+        .quote-box {
+            background: linear-gradient(to right, #fdf2f8, #faf5ff);
+            padding: 1rem;
+            border-radius: 1rem;
+            border: 1px solid #f9a8d4;
+            margin: 1.5rem 0;
+        }
+
+        .quote-text {
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .button {
+            width: 100%;
+            background: #be185d;
+            color: white;
+            font-weight: bold;
+            padding: 1rem 2rem;
+            border-radius: 1rem;
+            border: 2px solid #9d174d;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .button:hover {
+            background: #9d174d;
+            transform: scale(1.05);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .no-button {
+            position: fixed;
+            background: #b91c1c;
+            color: white;
+            font-weight: bold;
+            padding: 1rem 2rem;
+            border-radius: 1rem;
+            border: 2px solid #991b1b;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 20;
+            animation: wiggle 2s ease-in-out infinite;
+        }
+
+        .no-button:hover {
+            background: #991b1b;
+            transform: scale(1.05);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .no-button-bottom {
+            position: absolute;
+            bottom: -1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+
+        @keyframes bounce-cute {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-10px) scale(1.1); }
+        }
+
+        @keyframes pulse-heart {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.3); }
+        }
+
+        .forgiven-title {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @media (max-width: 640px) {
+            .card {
+                padding: 1.5rem;
+            }
+            .avatar {
+                width: 10rem;
+                height: 10rem;
+            }
+            .emoji {
+                font-size: 4rem;
+            }
+            .title {
+                font-size: 1.875rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements" id="floatingElements"></div>
+    <div class="confetti hidden" id="confetti"></div>
+
+    <div class="card" id="mainCard">
+        <div class="avatar-container">
+            <div class="avatar">
+                <div class="emoji" id="mainEmoji">🥺</div>
+                <div class="floating-icon heart" id="heartIcon">❤️</div>
+                <div class="floating-icon sparkle" id="sparkleIcon">✨</div>
+                <div class="floating-icon star" id="starIcon" style="display: none;">⭐</div>
+            </div>
+        </div>
+
+        <div>
+            <h1 class="title" id="mainTitle"></h1>
+            <p class="subtitle" id="subtitle"></p>
+            <p class="description" id="description"></p>
+        </div>
+
+        <div id="initialContent">
+            <button class="button" onclick="handleYesClick()">
+                <span>❤️</span>
+                Ya, aku maafkan 💕
+                <span>✨</span>
+            </button>
+        </div>
+
+        <div id="forgivenContent" class="hidden">
+            <div class="hearts-row">
+                <span class="heart-icon">❤️</span>
+                <span class="heart-icon">❤️</span>
+                <span class="heart-icon">❤️</span>
+                <span class="heart-icon">❤️</span>
+                <span class="heart-icon">❤️</span>
+                <span class="heart-icon">❤️</span>
+                <span class="heart-icon">❤️</span>
+            </div>
+
+            <div class="quote-box">
+                <p class="quote-text">"Cinta sejati selalu menemukan jalan kembali" 💖</p>
+            </div>
+        </div>
+    </div>
+
+    <button class="no-button no-button-bottom" id="noButton" onclick="handleNoClick()">
+        Tidak 😤
+    </button>
+
+    <script>
+        let forgiven = false;
+        let noButtonVisible = true;
+        let noButtonPosition = { x: 0, y: 0 };
+
+        function createFloatingElements() {
+            const container = document.getElementById('floatingElements');
+            const elements = ['❤️', '⭐', '✨', '💖', '🌸'];
+            
+            for (let i = 0; i < 25; i++) {
+                const element = document.createElement('div');
+                element.className = 'floating-element';
+                element.innerHTML = elements[Math.floor(Math.random() * elements.length)];
+                element.style.left = Math.random() * 100 + '%';
+                element.style.top = Math.random() * 100 + '%';
+                element.style.animationDelay = Math.random() * 5 + 's';
+                element.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                container.appendChild(element);
+            }
+        }
+
+        function createConfetti() {
+            const container = document.getElementById('confetti');
+            const elements = ['❤️', '⭐', '✨', '💖', '🌟'];
+            
+            for (let i = 0; i < 50; i++) {
+                const element = document.createElement('div');
+                element.className = 'confetti-item';
+                element.innerHTML = elements[Math.floor(Math.random() * elements.length)];
+                element.style.left = Math.random() * 100 + '%';
+                element.style.top = Math.random() * 100 + '%';
+                element.style.animationDelay = Math.random() * 2 + 's';
+                element.style.animationDuration = (Math.random() * 1 + 1) + 's';
+                container.appendChild(element);
+            }
+        }
+
+        function handleYesClick() {
+            forgiven = true;
+            noButtonVisible = false;
+            
+            // Hide no button
+            document.getElementById('noButton').classList.add('hidden');
+            
+            // Update content
+            document.getElementById('mainEmoji').textContent = '🥰';
+            document.getElementById('mainTitle').textContent = 'Aku tahu kamu akan memaafkanku! 💕';
+            document.getElementById('mainTitle').classList.add('forgiven-title');
+            document.getElementById('subtitle').textContent = 'Kamu adalah orang termanis di dunia 🌸';
+            document.getElementById('description').textContent = 'Aku berjanji akan lebih baik setiap hari ✨';
+            
+            // Show star icon
+            document.getElementById('starIcon').style.display = 'block';
+            
+            // Switch content
+            document.getElementById('initialContent').classList.add('hidden');
+            document.getElementById('forgivenContent').classList.remove('hidden');
+            
+            // Show confetti
+            document.getElementById('confetti').classList.remove('hidden');
+            createConfetti();
+            
+            // Hide confetti after 3 seconds
+            setTimeout(() => {
+                document.getElementById('confetti').classList.add('hidden');
+            }, 3000);
+        }
+
+        function handleNoClick() {
+            const maxX = Math.max(window.innerWidth - 120, 100);
+            const maxY = Math.max(window.innerHeight - 80, 100);
+            const randomX = Math.random() * (maxX - 100) + 50;
+            const randomY = Math.random() * (maxY - 80) + 50;
+
+            const noButton = document.getElementById('noButton');
+            noButton.style.left = randomX + 'px';
+            noButton.style.top = randomY + 'px';
+            noButton.style.transform = 'translate(-50%, -50%)';
+            noButton.classList.remove('no-button-bottom');
+        }
+
+        // Initialize floating elements
+        createFloatingElements();
+    </script>
+</body>
+</html>
